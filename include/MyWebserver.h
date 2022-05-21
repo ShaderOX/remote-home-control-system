@@ -5,14 +5,11 @@
 #include <WiFi.h>
 #include "Utils.h"
 
-// #define TEST_LED_PIN 4
-
 namespace MyWebServer {
   static uint32_t currentTime = 0;
   static uint32_t lastTime = 0;
   static const uint32_t waitInterval = 2000;
   static WiFiServer *server;
-  // static uint8_t TEST_LED_STATE = false;
 
   static String requestHeaderPayload = "";
   static String requestPayload = "";
