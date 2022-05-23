@@ -5,17 +5,21 @@
 #include <WiFi.h>
 
 // WIFI Credentials
-#define SSID "KSAFE G"
-#define PASSWORD "kashif123"
+#define SSID "A1 Lahori"
+#define PASSWORD "password"
 
 // WebServer Port
 #define HTTP_PORT 80 
+#define IR_RECEIVER_PIN 19 
+
+#define WIFI_RETRY_COUNT 25 
 
 namespace Utils {
   struct Device {
     String name;
     uint8_t pin;
     bool state;
+    uint32_t irCode;
   };
 
   void initPorts(Utils::Device *devices, size_t devicesCount);

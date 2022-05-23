@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP32 | Remote Home Control System</title>
+</head>
+
+<body>
+  <button id="led0">LED 0</button>
+  <button id="led1">LED 1</button>
+</body>
+
+<script defer>
+
+  fetch('/status').then(res => res.json()).then(state => {
+    const buttons = document.querySelectorAll("button");
+    updateButton(buttons, state);
+
+    buttons.forEach(button => button.addEventListener("click", () => {
+      fetch(`/${button.id}/toggle`).then(response => response.json()).then(data => {
+        state = { ...state, ...data };
+        updateButton(buttons, state);
+      }).catch(e => {
+        console.log(e);
+      });
+    }));
+
+    function updateButton(buttons, state) {
+      buttons.forEach(button => {
+        if (state[button.id]) {
+          button.style.backgroundColor = "green";
+        } else {
+          button.style.backgroundColor = "red";
+        }
+      });
+    }
+  });
+
+</script>
+
+</html>
+
+
+<!-- https://jsonformatter.org/javascript-escape -->
