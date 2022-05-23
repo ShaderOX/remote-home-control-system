@@ -28,7 +28,7 @@ void setup() {
   // Connecting to WiFi
   MyWifi::setupWifi(SSID, PASSWORD);
 
-  // Starting the HTTP WebServer 
+  // Creating the HTTP WebServer 
   pWebServer = MyWebServer::initWebServer(HTTP_PORT);
   if (pWebServer == nullptr) {
     Serial.println("ERROR: Web Server not started, Wifi not connected");
@@ -74,5 +74,4 @@ void loop() {
 
     IrReceiver.resume();
   }
-
 }
