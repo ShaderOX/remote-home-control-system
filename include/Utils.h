@@ -5,7 +5,7 @@
 #include <WiFi.h>
 
 // WIFI Credentials
-#define SSID "A1 Lahori"
+#define SSID "Asad"
 #define PASSWORD "password"
 
 // WebServer Port
@@ -13,6 +13,8 @@
 #define IR_RECEIVER_PIN 19 
 
 #define WIFI_RETRY_COUNT 25 
+
+#define WIFI_TIMEOUT 5000 
 
 namespace Utils {
   struct Device {

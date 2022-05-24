@@ -7,20 +7,22 @@
 
 WiFiServer *pWebServer;
 Utils::Device devices[] = {
-  {"wifi", LED_BUILTIN, false, 0x0},
-  { "led0", 4, false, 0xe9169f00},
-  { "led1", 5, false, 0xb8479f00},
-  { "led2", 21, false, 0xa8579f00}
+  {"wifi", LED_BUILTIN, false, UINT32_MAX},
+  { "led0", 4, false, 0xfb04ef00},
+  { "led1", 5, false, 0xf807ef00},
 };
 
 const size_t DEVICES_CONNECTED = sizeof(devices) / sizeof(Utils::Device);
+
+uint32_t currentTimestamp = 0;
+uint32_t previousTimestamp = 0;
 
 void setup() {
   Serial.begin(9600);
   Serial.println("Starting...");
 
   // IR Receiver Setting 
-  IrReceiver.begin(IR_RECEIVER_PIN);
+  IrReceiver.begin(IR_RECEIVER_PIN, true, 21);
 
   // Initialize the ports
   initPorts(devices, DEVICES_CONNECTED);
@@ -36,6 +38,7 @@ void setup() {
 }
 
 void loop() {
+  currentTimestamp = millis();
   Utils::WifiConnectivityLED(LED_BUILTIN);
 
   // Creating a WebServer
@@ -52,11 +55,19 @@ void loop() {
     }
   }
 
-  if (WiFi.status() != WL_CONNECTED) {
-    MyWebServer::closeWebServer();
-    pWebServer = nullptr;
+  if (WiFi.status() != WL_CONNECTED && (currentTimestamp - previousTimestamp > WIFI_TIMEOUT)) {
+    if (pWebServer != nullptr) {
+      MyWebServer::closeWebServer();
+      pWebServer = nullptr;
+    }
 
-    MyWifi::setupWifi(SSID, PASSWORD, true);
+    Serial.println("Reconnecting WiFi.... ");
+    WiFi.disconnect();
+    Serial.println("Disconnected WiFi.... ");
+    WiFi.reconnect();
+    if (WiFi.status() == WL_CONNECTED)
+      Serial.println("Wifi Connected");
+    previousTimestamp = currentTimestamp;
   }
 
   // Check for IR Receiver
